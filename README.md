@@ -1,0 +1,2 @@
+# nonogramsolver
+nonegramsolver
