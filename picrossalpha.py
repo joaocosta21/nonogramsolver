@@ -139,6 +139,8 @@ def interactive_solve(row_hints, col_hints):
         for i, hint in enumerate(hints):
             line = board[i] if is_row else ''.join(board[j][i] for j in range(rows))
             groups = [len(g) for g in line.split('.') if g]
+            if groups == [] and '#' not in line:  # Correctly validate empty rows/columns
+                continue
             if groups != hint:
                 print(f"Error: {'Row' if is_row else 'Column'} {i} does not match the hints.")
                 return False
@@ -157,7 +159,7 @@ def interactive_solve(row_hints, col_hints):
     return board
 
 if __name__ == "__main__":
-    initial = int(input("Welcome to Picross Alpha! Press Enter to continue, 1 to ur game, 2 ours: "))
+    initial = int(input("Welcome to Picross Alpha! Press Enter to continue, 1 our game, 2 yours: "))
     if initial == 2:
         rows, cols, row_hints, col_hints = get_picross_input()
     else:
