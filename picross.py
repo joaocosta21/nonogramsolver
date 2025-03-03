@@ -96,8 +96,6 @@ def extract_hints(image_path):
     top_hints, left_hints, grid_size = extract_hint_regions(processed_for_columns)  # Use column-friendly processing
     _, left_hints_rows, _ = extract_hint_regions(processed_for_rows)  # Use row-friendly processing
 
-    num_cells = grid_size // 5  # Assume a 5x5 grid for now
-
     # Extract individual hint cells
     column_cells = extract_cells(top_hints, 5, is_column=True)
     row_cells = extract_cells(left_hints_rows, 5, is_column=False)
