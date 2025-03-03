@@ -2,19 +2,19 @@ import cv2
 import pytesseract
 import numpy as np
 
-def preprocess_image(image_path):
+def preprocess_image_rows(image_path):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    
-    # Apply Gaussian blur to remove noise
-    blurred = cv2.GaussianBlur(image, (3, 3), 0)
-    
-    # Apply adaptive thresholding to enhance contrast
-    thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
-    
-    # Morphological operations to remove small noise
+    thresh = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
     kernel = np.ones((2,2), np.uint8)
     processed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
-    
+    return processed
+
+def preprocess_image_columns(image_path):
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    blurred = cv2.GaussianBlur(image, (3, 3), 0)
+    thresh = cv2.adaptiveThreshold(blurred, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+    kernel = np.ones((2,2), np.uint8)
+    processed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
     return processed
 
 def detect_grid_size(image):
@@ -34,8 +34,12 @@ def extract_hint_regions(image):
     """ Dynamically extracts hint areas using contours """
     x, y, grid_size = detect_grid_size(image)
     
+    # Set left hint width to 1/10 of total image width
+    image_width = image.shape[1]
+    left_hint_width = max(int(image_width * 0.1), x)  # Ensure it's at least `x`
+
     top_hints = image[0:y, x:x+grid_size]  # Top hint area
-    left_hints = image[y:y+grid_size, 0:x]  # Left hint area
+    left_hints = image[y:y+grid_size, 0:left_hint_width]  # Left hint area with fixed width
     
     cv2.imwrite("debug_top_hints.png", top_hints)
     cv2.imwrite("debug_left_hints.png", left_hints)
@@ -64,7 +68,7 @@ def extract_text_from_cells(cells):
     hints = []
     
     # Use OCR with custom whitelist and better segmentation
-    config = "--psm 6 -c tessedit_char_whitelist='0123456789 '"
+    config = "--psm 6 -c tessedit_char_whitelist='123456789 '"
     
     for i, cell in enumerate(cells):
         cell = cv2.bitwise_not(cell)  # Invert colors for better OCR
@@ -84,20 +88,24 @@ def extract_text_from_cells(cells):
     return hints
 
 def extract_hints(image_path):
-    processed_image = preprocess_image(image_path)
+    # Preprocess separately for rows and columns
+    processed_for_rows = preprocess_image_rows(image_path)
+    processed_for_columns = preprocess_image_columns(image_path)
     
     # Extract hint regions and detect grid size
-    top_hints, left_hints, grid_size = extract_hint_regions(processed_image)
+    top_hints, left_hints, grid_size = extract_hint_regions(processed_for_columns)  # Use column-friendly processing
+    _, left_hints_rows, _ = extract_hint_regions(processed_for_rows)  # Use row-friendly processing
+
     num_cells = grid_size // 5  # Assume a 5x5 grid for now
-    
+
     # Extract individual hint cells
     column_cells = extract_cells(top_hints, 5, is_column=True)
-    row_cells = extract_cells(left_hints, 5, is_column=False)
-    
+    row_cells = extract_cells(left_hints_rows, 5, is_column=False)
+
     # Get OCR text from each cell
     column_hints = extract_text_from_cells(column_cells)
     row_hints = extract_text_from_cells(row_cells)
-    
+
     return column_hints, row_hints
 
 if __name__ == "__main__":
