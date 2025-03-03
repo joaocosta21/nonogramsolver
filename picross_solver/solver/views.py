@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from itertools import product
+from django.shortcuts import render
 
 @api_view(['POST'])
 def solve_picross(request):
@@ -77,3 +78,6 @@ def merge_possibilities(options):
             if merged[i] != char:
                 merged[i] = '?'
     return ''.join(merged)
+
+def home(request):
+    return render(request, 'index.html')  # Ensure this path is correct

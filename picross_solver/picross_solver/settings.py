@@ -57,7 +57,7 @@ ROOT_URLCONF = 'picross_solver.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "solver/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
