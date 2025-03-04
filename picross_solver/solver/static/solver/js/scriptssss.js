@@ -82,8 +82,10 @@ async function solvePuzzle() {
     const colHints = [];
     for (let j = 0; j < width; j++) {
         const hints = [];
+        console.log(hints);
         for (let i = 0; i < maxColHints; i++) {
-            const value = colHintsInputs[j * maxColHints + i].value.trim();
+            console.log(i, j);
+            const value = colHintsInputs[i * width + j].value.trim(); // Corrected indices
             if (value) {
                 hints.push(parseInt(value));
             }
