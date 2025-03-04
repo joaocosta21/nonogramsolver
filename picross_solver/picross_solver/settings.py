@@ -31,19 +31,20 @@ ALLOWED_HOSTS = ['nonogramsolver.onrender.com', 'www.mycustomdomain.com', 'local
 
 INSTALLED_APPS = [
     'corsheaders',  # Add this before 'django.middleware.common.CommonMiddleware'
+    'rest_framework',  # Add Django REST framework
+    'solver',  # Add our app
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',  # Add Django REST framework
-    'solver',  # Add our app
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # Add this at the top
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Ensure this is here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -120,6 +121,14 @@ CORS_ALLOW_ALL_ORIGINS = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "solver/static",  # This tells Django where to find static files in development
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"  # This is where collectstatic will copy files in production
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
