@@ -4,56 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Picross Solver</title>
-    <style>
-        #grid { display: grid; grid-template-columns: repeat(10, 30px); gap: 2px; }
-        .cell { width: 30px; height: 30px; border: 1px solid black; text-align: center; }
-        .filled { background: black; }
-        .empty { background: white; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Picross Solver</h1>
+    <label>Width: <input type="number" id="width" value="4" min="1"></label>
+    <label>Height: <input type="number" id="height" value="7" min="1"></label>
+    <button onclick="generateGrid()">Generate Grid</button>
     <button onclick="solvePuzzle()">Solve</button>
-    <div id="grid"></div>
+    
+    <div class="container">
+        <div id="top-hints"></div> <!-- Column hints above the grid -->
+        <div></div> <!-- Empty space for alignment -->
+        <div id="side-hints"></div> <!-- Row hints on the left -->
+        <div id="grid"></div> <!-- The actual grid -->
 
-    <script>
-        async function solvePuzzle() {
-            const response = await fetch('https://nonogramsolver.onrender.com/api/solve/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    rows: 5, cols: 5,
-                    row_hints: [[1], [3], [5], [3], [1]],
-                    col_hints: [[1], [3], [5], [3], [1]]
-                })
-            });
-            const data = await response.json();
-            animateSolving(data.steps);
-        }
+    </div>
 
-        function animateSolving(steps) {
-            let index = 0;
-            function updateGrid() {
-                if (index >= steps.length) return;
-                drawGrid(steps[index].state);
-                index++;
-                setTimeout(updateGrid, 500);
-            }
-            updateGrid();
-        }
-
-        function drawGrid(board) {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = "";
-            grid.style.gridTemplateColumns = `repeat(${board[0].length}, 30px)`;
-            board.forEach(row => {
-                row.split('').forEach(cell => {
-                    const div = document.createElement('div');
-                    div.classList.add('cell', cell === '#' ? 'filled' : 'empty');
-                    grid.appendChild(div);
-                });
-            });
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

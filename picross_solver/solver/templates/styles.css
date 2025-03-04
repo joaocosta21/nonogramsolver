@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Side hints on left, grid on right */
+    grid-template-rows: auto 1fr; /* Top hints above, grid below */
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Top hints (column hints) */
+#top-hints {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-width), 30px); /* Match the grid columns */
+    gap: 2px; /* Match the gap in the grid */
+    grid-column: 2; /* Ensure top hints are in the same column as the grid */
+}
+
+/* Side hints (row hints) */
+#side-hints {
+    display: grid;
+    grid-auto-flow: row;
+    justify-self: end; /* Align side hints to the left */
+    gap: 2px; /* Match the gap in the grid */
+    grid-row: 2; /* Ensure side hints are in the same row as the grid */
+}
+
+/* The grid itself */
+#grid {
+    display: grid;
+    gap: 2px;
+    grid-column: 2; /* Ensure grid is in the same column as the top hints */
+    grid-row: 2; /* Ensure grid is in the same row as the side hints */
+}
+
+.cell, .hint-input {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filled {
+    background: black;
+    color: white;
+}
+
+.empty {
+    background: white;
+}
+
+.hint-input {
+    background: lightgray;
+    font-size: 16px;
+}
