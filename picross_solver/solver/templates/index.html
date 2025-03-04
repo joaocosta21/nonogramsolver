@@ -1,26 +1,26 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Picross Solver</title>
-    <link rel="stylesheet" href="{% static 'solver/css/stylessss.css' %}">
-</head>
-<body>
-    <h1>Picross Solver</h1>
-    <label>Width: <input type="number" id="width" value="4" min="1"></label>
-    <label>Height: <input type="number" id="height" value="7" min="1"></label>
-    <button onclick="generateGrid()">Generate Grid</button>
-    <button onclick="solvePuzzle()">Solve</button>
-    
-    <div class="container">
-        <div id="top-hints"></div> <!-- Column hints above the grid -->
-        <div></div> <!-- Empty space for alignment -->
-        <div id="side-hints"></div> <!-- Row hints on the left -->
-        <div id="grid"></div> <!-- The actual grid -->
-    </div>
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Picross Solver</title>
+        <link rel="stylesheet" href="{% static 'solver/css/stylessss.css' %}">
+    </head>
+    <body>
+        <h1>Picross Solver</h1>
+        <label>Width: <input type="number" id="width" value="4" min="1"></label>
+        <label>Height: <input type="number" id="height" value="7" min="1"></label>
+        <button onclick="generateGrid()">Generate Grid</button>
+        <button onclick="solvePuzzle()">Solve</button>
+        
+        <div class="container">
+            <div id="top-hints"></div> <!-- Column hints above the grid -->
+            <div></div> <!-- Empty space for alignment -->
+            <div id="side-hints"></div> <!-- Row hints on the left -->
+            <div id="grid"></div> <!-- The actual grid -->
+        </div>
 
-    <script src="{% static 'solver/js/scriptssss.js' %}"></script>
-</body>
-</html>
+        <script src="{% static 'solver/js/scriptssss.js' %}"></script>
+    </body>
+    </html>
