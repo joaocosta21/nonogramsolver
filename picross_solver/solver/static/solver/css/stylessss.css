@@ -7,7 +7,7 @@ body {
     display: grid;
     grid-template-columns: auto 1fr; /* Side hints on left, grid on right */
     grid-template-rows: auto 1fr; /* Top hints above, grid below */
-    gap: 5px;
+    gap: 5px; /* General gap for the container */
     justify-content: center;
     align-items: center;
 }
@@ -16,8 +16,9 @@ body {
 #top-hints {
     display: grid;
     grid-template-columns: repeat(var(--grid-width), 30px); /* Match the grid columns */
-    gap: 2px; /* Match the gap in the grid */
+    gap: 1px; /* Match the gap in the grid */
     grid-column: 2; /* Ensure top hints are in the same column as the grid */
+    width: fit-content; /* Ensure the width matches the grid */
 }
 
 /* Side hints (row hints) */
@@ -25,16 +26,19 @@ body {
     display: grid;
     grid-auto-flow: row;
     justify-self: end; /* Align side hints to the left */
-    gap: 2px; /* Match the gap in the grid */
+    gap: 1px; /* Match the gap in the grid */
     grid-row: 2; /* Ensure side hints are in the same row as the grid */
+    margin-right: 2px; /* Add 2px space between side hints and grid */
 }
 
 /* The grid itself */
 #grid {
     display: grid;
-    gap: 2px;
+    gap: 1px;
+    grid-template-columns: repeat(var(--grid-width), 30px); /* Match the top hints columns */
     grid-column: 2; /* Ensure grid is in the same column as the top hints */
     grid-row: 2; /* Ensure grid is in the same row as the side hints */
+    width: fit-content; /* Ensure the width matches the top hints */
 }
 
 .cell, .hint-input {
@@ -46,6 +50,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box; /* Include border in width/height calculations */
 }
 
 .filled {
@@ -57,7 +62,30 @@ body {
     background: white;
 }
 
+.zero-percent {
+    background: grey; /* Grey background for empty cells */
+    color: white; /* White text for "0%" */
+    font-size: 12px; /* Smaller font size for the percentage */
+}
+
 .hint-input {
     background: lightgray;
     font-size: 16px;
+}
+
+.uncertain {
+    font-size: 10px; /* Smaller font size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightyellow; /* Optional: Highlight uncertain cells */
+}
+
+#status-box {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    text-align: center;
 }
